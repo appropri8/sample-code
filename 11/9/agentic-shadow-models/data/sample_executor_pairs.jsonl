@@ -1,0 +1,5 @@
+{"input": "get order status #123", "output": "order #123 is in transit"}
+{"input": "cancel order #555", "output": "order #555 has been cancelled"}
+{"input": "change address for #777", "output": "address updated for #777"}
+{"input": "estimated delivery for #888", "output": "order #888 arrives tomorrow"}
+{"input": "refund order #321", "output": "refund initiated for #321"}
