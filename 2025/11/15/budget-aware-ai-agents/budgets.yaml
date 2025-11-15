@@ -1,0 +1,21 @@
+# Budget configurations for different use cases
+
+budgets:
+  quick_answer:
+    max_steps: 5
+    max_tokens: 2000
+    max_seconds: 10
+    max_nested_tool_calls: 2
+  
+  deep_research:
+    max_steps: 20
+    max_tokens: 50000
+    max_seconds: 60
+    max_nested_tool_calls: 10
+  
+  batch_processing:
+    max_steps: 50
+    max_tokens: 100000
+    max_seconds: 300
+    max_nested_tool_calls: 20
+
