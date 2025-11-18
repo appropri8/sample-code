@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myapp
+  namespace: ${NAMESPACE}
+  labels:
+    app: myapp
+    env: pr-${PR_NUMBER}
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: pr-${PR_NUMBER}.myapp.dev
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: myapp
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - pr-${PR_NUMBER}.myapp.dev
+    secretName: pr-${PR_NUMBER}-tls
+

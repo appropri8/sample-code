@@ -1,0 +1,19 @@
+{
+  "name": "ephemeral-pr-env-app",
+  "version": "1.0.0",
+  "description": "Sample application for ephemeral PR environments",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "keywords": [
+    "kubernetes",
+    "ephemeral",
+    "pr-environments"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {}
+}
+

@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myapp
+  namespace: ${NAMESPACE}
+  labels:
+    app: myapp
+    env: pr-${PR_NUMBER}
+    managed-by: pr-env
+  annotations:
+    pr-number: "${PR_NUMBER}"
+    pr-branch: "${GITHUB_REF_NAME}"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+        env: pr-${PR_NUMBER}
+    spec:
+      containers:
+      - name: myapp
+        image: ${REGISTRY}/${IMAGE_NAME}:${IMAGE_TAG}
+        ports:
+        - containerPort: 8080
+        env:
+        - name: ENV
+          value: "pr-${PR_NUMBER}"
+        - name: PR_NUMBER
+          value: "${PR_NUMBER}"
+        resources:
+          requests:
+            cpu: 100m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+

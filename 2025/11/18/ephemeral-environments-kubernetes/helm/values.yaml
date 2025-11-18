@@ -1,0 +1,23 @@
+namespace: default
+
+image:
+  repository: ghcr.io/org/myapp
+  tag: latest
+
+ingress:
+  enabled: true
+  host: myapp.dev
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi
+
+replicas: 1
+
