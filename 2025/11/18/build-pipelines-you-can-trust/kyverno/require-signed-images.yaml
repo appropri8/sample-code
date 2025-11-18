@@ -1,0 +1,42 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-signed-images
+  annotations:
+    policies.kyverno.io/title: Require Signed Images
+    policies.kyverno.io/category: Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      Ensures that all container images are signed and from a trusted registry.
+      This policy verifies image signatures using Cosign and only allows images
+      from the GitHub Container Registry that were signed by GitHub Actions.
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: check-image-signature
+    match:
+      resources:
+        kinds:
+        - Pod
+        namespaces:
+        - production  # Start with prod only, expand later
+    validate:
+      message: "Image must be signed and from trusted registry (ghcr.io)"
+      pattern:
+        spec:
+          containers:
+          - name: "*"
+            image: "ghcr.io/*"  # Only allow images from GitHub Container Registry
+    verifyImages:
+    - image: "ghcr.io/*"
+      attestors:
+      - count: 1
+        entries:
+        - keyless:
+            issuer: "https://token.actions.githubusercontent.com"
+            subject: ".*"  # Allow any GitHub Actions workflow
+            # Optional: restrict to specific repos
+            # subject: "https://github.com/yourorg/yourrepo/.github/workflows/*"
+

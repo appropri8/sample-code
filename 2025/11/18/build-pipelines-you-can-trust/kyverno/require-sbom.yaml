@@ -1,0 +1,31 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-sbom
+  annotations:
+    policies.kyverno.io/title: Require SBOM
+    policies.kyverno.io/category: Security
+    policies.kyverno.io/severity: medium
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      Ensures that container images have an SBOM attached as an OCI artifact.
+      This policy checks for the presence of SBOM artifacts in the registry.
+spec:
+  validationFailureAction: audit  # Start in audit mode
+  background: false
+  rules:
+  - name: check-sbom-exists
+    match:
+      resources:
+        kinds:
+        - Pod
+    validate:
+      message: "Image should have SBOM attached. Generate SBOM in CI pipeline."
+      # Note: Kyverno doesn't directly verify OCI artifacts, but we can
+      # check annotations or use a custom validation webhook
+      # For now, this is a placeholder that logs violations
+      pattern:
+        metadata:
+          annotations:
+            "sbom.attached": "true"
+

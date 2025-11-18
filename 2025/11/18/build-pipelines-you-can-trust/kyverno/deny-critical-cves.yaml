@@ -1,0 +1,36 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: deny-critical-cves
+  annotations:
+    policies.kyverno.io/title: Deny Critical CVEs
+    policies.kyverno.io/category: Security
+    policies.kyverno.io/severity: high
+    policies.kyverno.io/subject: Pod
+    policies.kyverno.io/description: >-
+      Blocks deployment of images with critical or high severity CVEs.
+      This policy uses Trivy to scan images before they are deployed.
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: scan-for-cves
+    match:
+      resources:
+        kinds:
+        - Pod
+        namespaces:
+        - production
+    validate:
+      message: "Image contains critical or high severity CVEs. Fix vulnerabilities before deploying."
+      # Note: This requires a custom validation webhook that runs Trivy
+      # For a complete implementation, you would need:
+      # 1. A validation webhook service that scans images
+      # 2. Integration with Trivy or similar scanner
+      # 3. Caching to avoid re-scanning the same image
+      # This is a placeholder showing the policy structure
+      pattern:
+        metadata:
+          annotations:
+            "security.scan.passed": "true"
+

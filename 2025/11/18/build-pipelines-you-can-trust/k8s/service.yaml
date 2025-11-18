@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: secure-app
+  namespace: production
+  labels:
+    app: secure-app
+spec:
+  type: ClusterIP
+  selector:
+    app: secure-app
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+
