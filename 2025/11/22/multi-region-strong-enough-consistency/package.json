@@ -1,0 +1,37 @@
+{
+  "name": "multi-region-strong-enough-consistency",
+  "version": "1.0.0",
+  "description": "Practical patterns for 'strong enough' consistency in multi-region systems",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "example:idempotent-write": "ts-node examples/idempotent-write.ts",
+    "example:optimistic-locking": "ts-node examples/optimistic-locking.ts",
+    "example:conflict-resolution": "ts-node examples/conflict-resolution.ts",
+    "example:region-routing": "ts-node examples/region-routing.ts",
+    "example:metrics": "ts-node examples/metrics.ts"
+  },
+  "keywords": [
+    "multi-region",
+    "consistency",
+    "distributed-systems",
+    "system-design",
+    "idempotency",
+    "conflict-resolution"
+  ],
+  "author": "Yusuf Elborey",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {}
+}
+
