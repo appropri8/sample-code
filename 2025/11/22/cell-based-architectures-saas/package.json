@@ -1,0 +1,37 @@
+{
+  "name": "cell-based-architectures-saas",
+  "version": "1.0.0",
+  "description": "Cell-based architecture implementation for multi-tenant SaaS systems",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "example:basic-routing": "ts-node examples/basic-routing.ts",
+    "example:control-plane": "ts-node examples/control-plane.ts",
+    "example:event-streaming": "ts-node examples/event-streaming.ts",
+    "example:rebalancing": "ts-node examples/rebalancing.ts"
+  },
+  "keywords": [
+    "saas",
+    "multi-tenant",
+    "architecture",
+    "cell-based",
+    "blast-radius",
+    "system-design"
+  ],
+  "author": "Yusuf Elborey",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/jest": "^29.5.0",
+    "@types/node": "^20.0.0",
+    "jest": "^29.5.0",
+    "ts-jest": "^29.1.0",
+    "ts-node": "^10.9.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {}
+}
+
+
