@@ -1,0 +1,23 @@
+# Model policy for zero-trust AIoT devices
+allowed_models:
+  - model_id: "object_detector_v2"
+    allowed_versions: ["2.1.0", "2.1.1", "2.2.0"]
+    allowed_device_groups: ["fleet-a", "fleet-b"]
+    issuer: "your-ca"
+    min_safe_version: "2.1.0"
+  
+  - model_id: "anomaly_detector_v1"
+    allowed_versions: ["1.0.0", "1.0.1"]
+    allowed_device_groups: ["fleet-a"]
+    issuer: "your-ca"
+    min_safe_version: "1.0.0"
+
+vulnerable_versions:
+  - "object_detector_v2:2.0.0"
+  - "object_detector_v2:2.0.1"
+  - "anomaly_detector_v1:0.9.0"
+
+trusted_issuers:
+  - "your-ca"
+  - "partner-ca"
+

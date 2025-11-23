@@ -1,0 +1,24 @@
+{
+  "name": "zero-trust-aiot-patterns",
+  "version": "1.0.0",
+  "description": "Zero-trust security patterns for AIoT edge devices",
+  "main": "src/mqtt_client.js",
+  "scripts": {
+    "test": "node tests/test_mqtt_client.js"
+  },
+  "keywords": [
+    "aiot",
+    "zero-trust",
+    "mqtt",
+    "security"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "mqtt": "^5.3.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
+
