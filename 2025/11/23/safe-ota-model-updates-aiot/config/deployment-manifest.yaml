@@ -1,0 +1,31 @@
+# OTA Deployment Manifest
+# This manifest defines what to deploy and where
+
+model_id: "object_detector_v2"
+version: "2.1.3"
+data_version: "data_v1.5"
+artifact_url: "https://models.example.com/object_detector_v2/2.1.3/model.tflite"
+sha256: "a1b2c3d4e5f6789012345678901234567890abcdef1234567890abcdef123456"
+signature_url: "https://models.example.com/object_detector_v2/2.1.3/model.sig"
+
+# Target cohort: devices matching this query will receive the update
+target_cohort: "region:eu-west AND hw:rev2"
+
+# Rollout configuration
+rollout_percentage: 5  # Start with 5% of matching devices
+start_time: "2025-11-23T10:00:00Z"
+end_time: "2025-11-23T18:00:00Z"
+
+# Compatibility requirements
+compatibility:
+  min_firmware: "1.8.0"
+  max_firmware: "2.0.0"
+
+# Health check thresholds
+health_checks:
+  max_cpu_percent: 80
+  max_ram_percent: 90
+  max_latency_ms: 200
+  max_error_rate: 0.01
+  warmup_inferences: 1000
+
