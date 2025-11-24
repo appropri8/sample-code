@@ -1,0 +1,25 @@
+{
+  "version": "1.2.3",
+  "build_id": "20251124-143022",
+  "target_hardware": [
+    "esp32-v2",
+    "esp32-v3"
+  ],
+  "min_bootloader_version": null,
+  "image": {
+    "url": "https://ota.example.com/firmware/1.2.3/esp32-v2.bin",
+    "size": 1048576,
+    "hash": "sha256:abc123def4567890123456789012345678901234567890123456789012345678",
+    "signature": "base64:xyz789...",
+    "compression": null
+  },
+  "metadata": {
+    "release_notes": "Security patch for CVE-2025-1234",
+    "rollout_percentage": 0,
+    "required": false,
+    "min_ram_kb": null,
+    "min_flash_kb": null
+  },
+  "update_type": "firmware"
+}
+
