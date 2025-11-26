@@ -1,0 +1,70 @@
+# Federated Learning Configuration
+
+federated_learning:
+  # Number of clients in the system
+  num_clients: 10
+  
+  # Number of clients selected per round
+  clients_per_round: 5
+  
+  # Number of local training epochs per client
+  local_epochs: 3
+  
+  # Learning rate for local training
+  learning_rate: 0.01
+  
+  # Batch size for local training
+  batch_size: 32
+
+communication:
+  # Maximum payload size in KB
+  max_payload_size_kb: 10
+  
+  # Quantization bits (8 or 4)
+  quantization_bits: 8
+  
+  # Use sparse updates (only send changed weights)
+  use_sparse_updates: true
+  
+  # Threshold for sparse updates (weights below this are not sent)
+  sparse_threshold: 0.01
+  
+  # Compress payloads with gzip
+  use_compression: true
+
+round_schedule:
+  # Round frequency: "daily", "weekly", "monthly", or "event-triggered"
+  frequency: "daily"
+  
+  # Time for scheduled rounds (UTC)
+  time: "02:00 UTC"
+  
+  # Minimum number of participants required
+  min_participants: 5
+  
+  # Maximum number of participants per round
+  max_participants: 20
+  
+  # Client selection strategy: "random", "stratified", "availability", "performance"
+  selection_strategy: "random"
+
+aggregation:
+  # Aggregation method: "fedavg", "median", "weighted"
+  method: "fedavg"
+  
+  # Weight by number of samples (for FedAvg)
+  weight_by_samples: true
+
+model:
+  # Model architecture type
+  architecture: "mlp"  # or "cnn", "rnn"
+  
+  # Input size
+  input_size: 784
+  
+  # Hidden layer sizes
+  hidden_sizes: [128, 64]
+  
+  # Output size (number of classes)
+  output_size: 10
+
