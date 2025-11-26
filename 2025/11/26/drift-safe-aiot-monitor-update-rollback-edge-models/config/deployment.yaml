@@ -1,0 +1,119 @@
+# Deployment configuration for model rollout
+# Defines rollout rings, rollback conditions, and model metadata
+
+model_id: vibration_anomaly_v1
+version: 1.2.3
+trained_on:
+  start_date: "2025-01-01"
+  end_date: "2025-06-30"
+  data_sources:
+    - "factory_a_pumps"
+    - "factory_b_pumps"
+    - "lab_test_rigs"
+
+performance:
+  accuracy: 0.94
+  false_positive_rate: 0.02
+  false_negative_rate: 0.01
+  threshold: 0.15  # Anomaly score threshold
+
+rollout:
+  # Ring 0: Lab/Staging (test environment)
+  ring_0:
+    devices:
+      - "pump-test-001"
+      - "pump-test-002"
+    start_date: "2025-11-26"
+    status: active
+    monitoring_period_days: 7
+    success_criteria:
+      false_alarm_rate_max: 0.05
+      confidence_min: 0.90
+      error_rate_max: 0.01
+  
+  # Ring 1: Friendly customers / One site
+  ring_1:
+    devices:
+      - "pump-factory-a-*"  # All devices in factory A
+    start_date: "2025-12-01"
+    status: pending
+    depends_on: ring_0
+    monitoring_period_days: 14
+    success_criteria:
+      false_alarm_rate_max: 0.05
+      confidence_min: 0.90
+      error_rate_max: 0.01
+  
+  # Ring 2: Full fleet
+  ring_2:
+    devices:
+      - "pump-*"  # All pumps
+    start_date: "2025-12-15"
+    status: pending
+    depends_on: ring_1
+    rollout_strategy: gradual  # gradual or all_at_once
+    gradual_rollout:
+      - percentage: 10
+        duration_days: 3
+      - percentage: 50
+        duration_days: 7
+      - percentage: 100
+        duration_days: 14
+    monitoring_period_days: 30
+    success_criteria:
+      false_alarm_rate_max: 0.05
+      confidence_min: 0.90
+      error_rate_max: 0.01
+
+rollback_conditions:
+  # Automatic rollback triggers
+  - name: false_alarm_rate_increase
+    metric: false_alarm_rate
+    threshold: 0.5  # 50% increase from baseline
+    action: auto_rollback
+  
+  - name: confidence_drop
+    metric: mean_confidence
+    threshold: 0.1  # 10% drop from baseline
+    action: auto_rollback
+  
+  - name: error_rate_increase
+    metric: error_rate
+    threshold: 0.2  # 20% increase from baseline
+    action: auto_rollback
+  
+  - name: operator_override_rate
+    metric: operator_override_rate
+    threshold: 0.3  # 30% of predictions overridden
+    action: alert_and_investigate
+
+safe_mode:
+  # Fallback to rules-based logic if model health is bad
+  enabled: true
+  trigger_conditions:
+    - confidence_below: 0.70
+    - error_rate_above: 0.10
+  fallback_logic:
+    type: threshold_based
+    rules:
+      - feature: vibration_rms
+        threshold: 3.5
+        action: alert
+
+model_registry:
+  storage: s3://models/vibration-anomaly/
+  metadata_format: json
+  versioning: semantic
+  retention:
+    keep_versions: 5
+    archive_after_days: 90
+
+device_compatibility:
+  min_firmware_version: "2.1.0"
+  required_features:
+    - accelerometer_3axis
+    - tflite_runtime
+  memory_requirements:
+    ram_kb: 128
+    flash_kb: 256
+
