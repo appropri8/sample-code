@@ -1,0 +1,32 @@
+{
+  "name": "backpressure-first-systems",
+  "version": "1.0.0",
+  "description": "Code samples for designing backpressure-first systems",
+  "main": "src/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "test": "jest"
+  },
+  "keywords": [
+    "backpressure",
+    "rate-limiting",
+    "circuit-breaker",
+    "system-design"
+  ],
+  "author": "Yusuf Elborey",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "@types/express": "^4.17.21"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2",
+    "jest": "^29.7.0",
+    "@types/jest": "^29.5.11"
+  }
+}
+
