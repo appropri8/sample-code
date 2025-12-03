@@ -1,0 +1,12 @@
+# Requirements for LLM Evaluation System
+
+# Core dependencies
+# Note: In production, you would use actual LLM SDKs like:
+# openai>=1.0.0
+# anthropic>=0.18.0
+
+# For this demo, we use standard library only
+# Add these for production use:
+# requests>=2.31.0
+# python-dotenv>=1.0.0
+
