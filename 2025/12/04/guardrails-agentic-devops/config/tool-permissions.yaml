@@ -1,0 +1,64 @@
+# Tool permission configuration
+# Maps tools to permission levels and agent roles to allowed permissions
+
+tools:
+  - name: get_pod_metrics
+    permission: read
+    description: "Read pod metrics"
+  
+  - name: get_deployment_status
+    permission: read
+    description: "Get deployment status"
+  
+  - name: scale_deployment
+    permission: write
+    description: "Scale a deployment"
+    requires_approval: false
+    max_scale_factor: 2.0  # Can't scale more than 2x at once
+  
+  - name: restart_pod
+    permission: write
+    description: "Restart a pod"
+    requires_approval: false
+  
+  - name: delete_namespace
+    permission: admin
+    description: "Delete a namespace"
+    requires_approval: true
+    allowed_environments: ["staging", "development"]
+  
+  - name: rotate_secret
+    permission: admin
+    description: "Rotate a secret"
+    requires_approval: true
+
+agent_roles:
+  observer:
+    allowed_permissions: ["read"]
+    description: "Read-only agent for monitoring and metrics"
+  
+  operator:
+    allowed_permissions: ["read", "write"]
+    max_scale_factor: 2.0  # Can't scale more than 2x
+    description: "Operator agent with limited write access"
+  
+  admin:
+    allowed_permissions: ["read", "write", "admin"]
+    requires_approval_for: ["admin"]
+    description: "Admin agent with full access (requires approval for admin actions)"
+
+environments:
+  production:
+    write_mode: false  # No writes in prod without approval
+    max_cost_per_request: 1.0
+    max_latency_ms: 10000
+  
+  staging:
+    write_mode: true
+    max_cost_per_request: 5.0
+    max_latency_ms: 30000
+  
+  development:
+    write_mode: true
+    max_cost_per_request: 10.0
+    max_latency_ms: 60000

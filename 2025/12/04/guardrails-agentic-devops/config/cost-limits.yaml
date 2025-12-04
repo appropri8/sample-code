@@ -1,0 +1,26 @@
+# Cost and rate limit configuration
+# Defines budgets and limits for each agent and tool
+
+agents:
+  ops-agent:
+    daily_budget_usd: 100.0
+    per_request_max_usd: 1.0
+    per_tool_limits:
+      scale_deployment:
+        max_calls_per_hour: 10
+        cost_per_call_usd: 0.01
+      delete_namespace:
+        max_calls_per_day: 1
+        cost_per_call_usd: 0.0  # Free but limited
+  
+  observer-agent:
+    daily_budget_usd: 10.0
+    per_request_max_usd: 0.1
+    per_tool_limits:
+      get_metrics:
+        max_calls_per_minute: 60
+        cost_per_call_usd: 0.001
+
+alerts:
+  budget_threshold_percent: 80  # Alert at 80% of budget
+  cost_anomaly_multiplier: 3.0   # Alert if 3x average cost

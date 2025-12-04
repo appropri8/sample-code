@@ -1,0 +1,47 @@
+# Kubernetes Role and RoleBinding for ops-agent service account
+# This demonstrates least-privilege RBAC for an agent that can
+# read metrics, scale deployments, and restart pods, but cannot delete resources
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: ops-agent
+  namespace: production
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: ops-agent-role
+  namespace: production
+rules:
+  # Read-only access to pods and deployments
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["get", "list", "watch"]
+  
+  # Limited write access - can scale but not delete
+  - apiGroups: ["apps"]
+    resources: ["deployments/scale"]
+    verbs: ["update", "patch"]
+  
+  # Can restart pods but not delete them
+  - apiGroups: [""]
+    resources: ["pods"]
+    verbs: ["patch"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: ops-agent-binding
+  namespace: production
+subjects:
+  - kind: ServiceAccount
+    name: ops-agent
+    namespace: production
+roleRef:
+  kind: Role
+  name: ops-agent-role
+  apiGroup: rbac.authorization.k8s.io
