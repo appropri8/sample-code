@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  static_checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd python
+          pip install -r requirements.txt
+      - name: Validate configs
+        run: |
+          cd python
+          python -c "import yaml; yaml.safe_load(open('../config/tool_permissions.yaml'))"
+
+  unit_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd python
+          pip install -r requirements.txt
+      - name: Run unit tests
+        run: |
+          cd python
+          pytest tests/test_agent_behavior.py -v
+
+  eval_suite:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd python
+          pip install -r requirements.txt
+      - name: Run eval suite
+        run: |
+          cd python
+          pytest tests/test_eval_suite.py -v
+      - name: Upload eval results
+        uses: actions/upload-artifact@v3
+        with:
+          name: eval-results
+          path: python/eval-results.json
+
+  observability_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd python
+          pip install -r requirements.txt
+      - name: Test observability
+        run: |
+          cd python
+          pytest tests/test_observability.py -v
+

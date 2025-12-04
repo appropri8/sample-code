@@ -1,0 +1,75 @@
+name: CD
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test_agents:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd python
+          pip install -r requirements.txt
+      - name: Run tests
+        run: |
+          cd python
+          pytest tests/ -v
+
+  run_eval_suite:
+    runs-on: ubuntu-latest
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: |
+          cd python
+          pip install -r requirements.txt
+      - name: Run eval suite
+        run: |
+          cd python
+          pytest tests/test_eval_suite.py -v
+
+  deploy_shadow:
+    needs: [test_agents, run_eval_suite]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy shadow
+        run: |
+          echo "Shadow deployment would run here"
+          echo "Baseline version: ${{ github.sha }}"
+          echo "Candidate version: ${{ github.sha }}"
+
+  promote_canary:
+    needs: [deploy_shadow]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Promote to canary
+        run: |
+          echo "Canary promotion would run here"
+          echo "Version: ${{ github.sha }}"
+          echo "Percentage: 1%"
+
+  full_rollout:
+    needs: [promote_canary]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Full rollout
+        run: |
+          echo "Full rollout would run here"
+          echo "Version: ${{ github.sha }}"
+

@@ -1,0 +1,36 @@
+agent_roles:
+  support_agent:
+    allowed_tools:
+      - search_kb
+      - create_ticket
+      - get_user_info
+    forbidden_tools:
+      - delete_user
+      - update_billing
+      - escalate_critical
+  
+  billing_agent:
+    allowed_tools:
+      - get_user_info
+      - update_billing
+      - get_payment_history
+    forbidden_tools:
+      - delete_user
+      - escalate_critical
+  
+  admin_agent:
+    allowed_tools:
+      - "*"  # All tools
+    forbidden_tools: []
+
+environments:
+  production:
+    write_mode: false  # No writes in prod without approval
+    max_cost_per_request: 1.0
+    max_latency_ms: 10000
+  
+  staging:
+    write_mode: true
+    max_cost_per_request: 5.0
+    max_latency_ms: 30000
+
