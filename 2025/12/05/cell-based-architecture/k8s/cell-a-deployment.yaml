@@ -1,0 +1,94 @@
+# Deployment for API services in Cell A
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-service-cell-a
+  namespace: cell-a
+  labels:
+    app: api-service
+    cell: cell-a
+    version: v1.2.3
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: api-service
+      cell: cell-a
+  template:
+    metadata:
+      labels:
+        app: api-service
+        cell: cell-a
+        version: v1.2.3
+    spec:
+      containers:
+      - name: api-service
+        image: myapp/api-service:v1.2.3
+        env:
+        - name: CELL_ID
+          value: "cell-a"
+        - name: DATABASE_HOST
+          value: "db-cell-a.internal"
+        - name: QUEUE_HOST
+          value: "queue-cell-a.internal"
+        - name: CACHE_HOST
+          value: "cache-cell-a.internal"
+        - name: CONTROL_PLANE_URL
+          value: "http://control-plane:3001"
+        ports:
+        - containerPort: 8080
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "250m"
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+# Service for the API
+apiVersion: v1
+kind: Service
+metadata:
+  name: api-service-cell-a
+  namespace: cell-a
+  labels:
+    app: api-service
+    cell: cell-a
+spec:
+  selector:
+    app: api-service
+    cell: cell-a
+  ports:
+  - port: 80
+    targetPort: 8080
+  type: ClusterIP
+---
+# ConfigMap for cell-specific configuration
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cell-a-config
+  namespace: cell-a
+data:
+  cell-id: "cell-a"
+  region: "us-east-1"
+  feature-flags.yaml: |
+    enableNewFeature: true
+    enableBetaFeature: false
+  rate-limits.yaml: |
+    api:
+      requestsPerSecond: 1000
+    workers:
+      concurrency: 50

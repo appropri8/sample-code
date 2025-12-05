@@ -1,0 +1,51 @@
+# Cell resource schema
+apiVersion: v1
+kind: Cell
+metadata:
+  name: cell-us-east-1
+  labels:
+    region: us-east-1
+    tier: production
+spec:
+  region: us-east-1
+  status: active
+  capacity:
+    maxTenants: 100
+    currentTenants: 45
+  endpoints:
+    api: https://api-cell-us-east-1.example.com
+    metrics: https://metrics-cell-us-east-1.example.com
+  resources:
+    database:
+      host: db-cell-us-east-1.example.com
+      port: 5432
+    queue:
+      host: queue-cell-us-east-1.example.com
+    cache:
+      host: cache-cell-us-east-1.example.com
+---
+# Tenant resource schema
+apiVersion: v1
+kind: Tenant
+metadata:
+  name: tenant-acme-corp
+spec:
+  tenantId: tenant-acme-corp
+  cellId: cell-us-east-1
+  name: Acme Corporation
+  tier: enterprise
+  region: us-east-1
+  migratedAt: "2025-12-01T00:00:00Z"
+---
+# Routing rule schema
+apiVersion: v1
+kind: RoutingRule
+metadata:
+  name: rule-tenant-acme
+  version: 1
+spec:
+  tenantId: tenant-acme-corp
+  cellId: cell-us-east-1
+  priority: 100
+  active: true
+  createdAt: "2025-12-01T00:00:00Z"

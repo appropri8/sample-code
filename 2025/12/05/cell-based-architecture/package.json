@@ -1,0 +1,30 @@
+{
+  "name": "cell-based-architecture",
+  "version": "1.0.0",
+  "description": "Complete executable code samples demonstrating cell-based architecture patterns",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx",
+    "start": "node dist/index.js",
+    "test": "jest"
+  },
+  "keywords": [
+    "cell-architecture",
+    "system-design",
+    "scalability",
+    "blast-radius"
+  ],
+  "author": "Yusuf Elborey",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "node-fetch": "^2.7.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.10.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.3"
+  }
+}
