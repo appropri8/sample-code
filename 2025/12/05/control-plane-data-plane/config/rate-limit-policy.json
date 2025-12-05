@@ -1,0 +1,11 @@
+{
+  "id": "policy-123",
+  "version": 1,
+  "tenantId": "tenant-123",
+  "limit": 1000,
+  "window": 60,
+  "scope": "api",
+  "description": "Rate limit policy for tenant-123",
+  "createdAt": "2025-12-05T10:00:00Z",
+  "updatedAt": "2025-12-05T10:00:00Z"
+}
