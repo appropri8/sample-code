@@ -1,0 +1,29 @@
+gates:
+  - name: "quality_score"
+    type: "threshold"
+    metric: "offline_quality_score"
+    threshold: 0.85
+    operator: ">="
+  
+  - name: "safety_score"
+    type: "threshold"
+    metric: "safety_checker_score"
+    threshold: 0.95
+    operator: ">="
+  
+  - name: "regression_tests"
+    type: "test_suite"
+    test_suite: "critical_scenarios"
+    min_pass_rate: 1.0
+  
+  - name: "latency"
+    type: "threshold"
+    metric: "p95_latency_ms"
+    threshold: 2000
+    operator: "<="
+  
+  - name: "cost"
+    type: "threshold"
+    metric: "avg_cost_per_request"
+    threshold: 0.50
+    operator: "<="
