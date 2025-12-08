@@ -1,0 +1,9 @@
+name: "Send notification"
+description: "Agent sends email notification to user"
+user_message: "Send email to user@example.com about order status"
+expected_tools:
+  - name: "send_notification"
+max_steps: 3
+policies:
+  no_pii_in_logs: true
+  validate_email_format: true

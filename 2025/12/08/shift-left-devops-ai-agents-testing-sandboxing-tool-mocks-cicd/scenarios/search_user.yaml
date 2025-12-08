@@ -1,0 +1,9 @@
+name: "Search for user"
+description: "Agent searches database for user information"
+user_message: "Search for user1@example.com"
+expected_tools:
+  - name: "search_database"
+max_steps: 3
+policies:
+  no_pii_in_logs: true
+  max_query_length: 500
