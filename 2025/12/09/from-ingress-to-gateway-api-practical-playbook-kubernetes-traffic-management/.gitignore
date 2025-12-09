@@ -1,0 +1,15 @@
+# Migration output
+migration-output/
+
+# Kubernetes config
+kubeconfig
+*.kubeconfig
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,23 @@
+# ReferenceGrant allows cross-namespace routing
+# This must be created in the namespace containing the target Service
+# Allows HTTPRoutes in 'apps' namespace to reference Services in 'backend' namespace
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: ReferenceGrant
+metadata:
+  name: allow-apps-to-backend
+  namespace: backend
+  labels:
+    managed-by: platform-team
+spec:
+  # Which namespaces can reference resources here
+  from:
+    - group: gateway.networking.k8s.io
+      kind: HTTPRoute
+      namespace: apps
+  # What resources can be referenced
+  to:
+    - group: ""
+      kind: Service
+    # Optional: Allow referencing specific services by name
+    # name: backend-service

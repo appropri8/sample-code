@@ -1,0 +1,26 @@
+# BackendTLSPolicy for mTLS or TLS verification to backends
+# Gateway API v1.2+ feature
+# Attaches to HTTPRoute or Service to configure backend TLS
+
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: BackendTLSPolicy
+metadata:
+  name: backend-tls
+  namespace: apps
+spec:
+  # Target: Apply this policy to an HTTPRoute
+  targetRef:
+    group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    name: api-route
+  # TLS configuration
+  tls:
+    # CA certificate for verifying backend certificates
+    caCertRefs:
+      - name: ca-cert
+        kind: ConfigMap
+        group: ""
+    # Verification mode
+    verify: Required
+    # Optional: Hostname for SNI
+    # hostname: api-backend.example.com

@@ -1,0 +1,35 @@
+# HTTPRoute with traffic splitting (canary deployment)
+# 90% to v1, 10% to v2
+# Gradually adjust weights to roll out new version
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: api-canary-route
+  namespace: apps
+  labels:
+    app: api
+    environment: production
+spec:
+  parentRefs:
+    - name: production-gateway
+      namespace: platform
+  hostnames:
+    - api.example.com
+  rules:
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      # Traffic splitting: 90% to v1, 10% to v2
+      backendRefs:
+        - name: api-v1
+          port: 80
+          weight: 90
+        - name: api-v2
+          port: 80
+          weight: 10
+      # Optional: Add timeouts
+      timeouts:
+        request: 30s
+        backendRequest: 10s

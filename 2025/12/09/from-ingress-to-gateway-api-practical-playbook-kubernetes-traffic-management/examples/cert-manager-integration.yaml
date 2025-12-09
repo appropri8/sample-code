@@ -1,0 +1,57 @@
+# cert-manager integration with Gateway API
+# cert-manager can automatically provision TLS certificates for Gateways
+
+---
+# ClusterIssuer for Let's Encrypt
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: admin@example.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+      # HTTP-01 challenge using Gateway API
+      - http01:
+          gatewayHTTPRoute:
+            parentRefs:
+              - name: production-gateway
+                namespace: platform
+
+---
+# Certificate resource
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: production-tls
+  namespace: platform
+spec:
+  secretName: production-tls
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
+  dnsNames:
+    - "*.example.com"
+    - "example.com"
+
+---
+# Gateway references the certificate Secret
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: production-gateway
+  namespace: platform
+spec:
+  gatewayClassName: traefik
+  listeners:
+    - name: https
+      protocol: HTTPS
+      port: 443
+      tls:
+        mode: Terminate
+        certificateRefs:
+          - name: production-tls  # Secret created by cert-manager
+            kind: Secret

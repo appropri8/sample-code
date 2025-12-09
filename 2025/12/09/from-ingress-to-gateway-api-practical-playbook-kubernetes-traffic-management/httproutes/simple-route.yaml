@@ -1,0 +1,31 @@
+# Simple HTTPRoute - basic routing to a single service
+# Application team owns this resource
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: frontend-route
+  namespace: apps
+  labels:
+    app: frontend
+    environment: production
+spec:
+  # Reference the Gateway (owned by platform team)
+  parentRefs:
+    - name: production-gateway
+      namespace: platform
+  # Hostname(s) this route handles
+  hostnames:
+    - frontend.example.com
+  # Routing rules
+  rules:
+    - matches:
+        # Match all paths
+        - path:
+            type: PathPrefix
+            value: /
+      # Route to this backend service
+      backendRefs:
+        - name: frontend-service
+          port: 80
+          weight: 100
