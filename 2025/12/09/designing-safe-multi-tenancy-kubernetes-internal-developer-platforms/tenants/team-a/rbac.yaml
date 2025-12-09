@@ -1,0 +1,66 @@
+# Tenant Admin Role - Full access within namespace
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: team-a
+  name: tenant-admin
+rules:
+- apiGroups: [""]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: ["apps"]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: ["batch"]
+  resources: ["*"]
+  verbs: ["*"]
+- apiGroups: [""]
+  resources: ["configmaps", "secrets"]
+  verbs: ["create", "update", "patch", "delete", "get", "list", "watch"]
+---
+# Tenant Admin RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tenant-admin-binding
+  namespace: team-a
+subjects:
+- kind: User
+  name: alice@company.com
+  apiGroup: rbac.authorization.k8s.io
+- kind: User
+  name: bob@company.com
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: tenant-admin
+  apiGroup: rbac.authorization.k8s.io
+---
+# Tenant Developer Role - Read-only access
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: team-a
+  name: tenant-developer
+rules:
+- apiGroups: [""]
+  resources: ["pods", "services", "configmaps", "secrets"]
+  verbs: ["get", "list", "watch"]
+- apiGroups: ["apps"]
+  resources: ["deployments", "replicasets"]
+  verbs: ["get", "list", "watch"]
+---
+# Tenant Developer RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: tenant-developer-binding
+  namespace: team-a
+subjects:
+- kind: User
+  name: charlie@company.com
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: tenant-developer
+  apiGroup: rbac.authorization.k8s.io

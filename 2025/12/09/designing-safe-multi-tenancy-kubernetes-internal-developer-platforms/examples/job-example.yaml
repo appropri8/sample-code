@@ -1,0 +1,45 @@
+# Example: Job following multi-tenancy best practices
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: example-job
+  namespace: team-a
+  labels:
+    tenant: team-a
+    app: example-job
+    component: worker
+    environment: production
+spec:
+  template:
+    metadata:
+      labels:
+        tenant: team-a
+        app: example-job
+        component: worker
+        environment: production
+    spec:
+      serviceAccountName: team-a-app
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+      containers:
+      - name: worker
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args: ["echo 'Processing job'; sleep 10; echo 'Job complete'"]
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+      restartPolicy: Never
+  backoffLimit: 3

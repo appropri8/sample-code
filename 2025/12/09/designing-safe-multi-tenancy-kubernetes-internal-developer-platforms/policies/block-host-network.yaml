@@ -1,0 +1,18 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: block-host-network
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: block-host-network
+    match:
+      resources:
+        kinds:
+        - Pod
+    validate:
+      message: "hostNetwork is not allowed"
+      pattern:
+        spec:
+          hostNetwork: "false"

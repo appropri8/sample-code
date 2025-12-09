@@ -1,0 +1,37 @@
+# Example: Virtual Cluster configuration using vcluster
+# This is a minimal example. For production, use the vcluster CLI or Helm chart.
+#
+# Prerequisites:
+# - vcluster CLI installed: https://www.vcluster.com/docs/getting-started/setup
+# - Or use Helm: helm repo add vcluster https://charts.loft.sh && helm repo update
+#
+# Create a virtual cluster:
+# vcluster create team-a-vcluster -n vcluster-team-a --kubernetes-version 1.28.0
+#
+# Or using Helm:
+# helm install team-a-vcluster vcluster/vcluster -n vcluster-team-a \
+#   --set vcluster.image=ghcr.io/loft-sh/vcluster:1.28.0 \
+#   --set service.type=ClusterIP
+
+# Host namespace for the virtual cluster
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: vcluster-team-a
+  labels:
+    tenant: team-a
+    vcluster: "true"
+    managed-by: platform-team
+  annotations:
+    description: "Host namespace for Team A virtual cluster"
+---
+# Note: vcluster creates its own StatefulSet and Services
+# This is just the namespace. Use vcluster CLI or Helm to create the actual vcluster.
+#
+# After creating the vcluster, Team A gets:
+# - Their own API server
+# - Their own etcd (or equivalent)
+# - Their own scheduler
+# - Can install CRDs independently
+# - Can use different Kubernetes versions
+# - But pods still run on shared nodes

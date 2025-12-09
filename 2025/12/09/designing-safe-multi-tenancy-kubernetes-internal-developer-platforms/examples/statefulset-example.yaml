@@ -1,0 +1,69 @@
+# Example: StatefulSet following multi-tenancy best practices
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: example-db
+  namespace: team-a
+  labels:
+    tenant: team-a
+    app: example-db
+    component: database
+    environment: production
+spec:
+  serviceName: example-db
+  replicas: 1
+  selector:
+    matchLabels:
+      app: example-db
+      tenant: team-a
+  template:
+    metadata:
+      labels:
+        tenant: team-a
+        app: example-db
+        component: database
+        environment: production
+    spec:
+      serviceAccountName: team-a-app
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+      containers:
+      - name: db
+        image: postgres:15
+        ports:
+        - containerPort: 5432
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "512Mi"
+          limits:
+            cpu: "1"
+            memory: "2Gi"
+        securityContext:
+          allowPrivilegeEscalation: false
+          capabilities:
+            drop:
+            - ALL
+        env:
+        - name: POSTGRES_DB
+          value: "example"
+        - name: POSTGRES_USER
+          value: "user"
+        - name: POSTGRES_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-password
+              key: password
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      resources:
+        requests:
+          storage: 10Gi

@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: team-a
+  labels:
+    tenant: team-a
+    owner: team-a@company.com
+    environment: production
+    pod-security.kubernetes.io/enforce: restricted
+    pod-security.kubernetes.io/audit: restricted
+    pod-security.kubernetes.io/warn: restricted
+  annotations:
+    description: "Namespace for Team A production workloads"
+    cost-center: "engineering"

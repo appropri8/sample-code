@@ -1,0 +1,54 @@
+# Example: Deployment following multi-tenancy best practices
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: example-app
+  namespace: team-a
+  labels:
+    tenant: team-a
+    app: example-app
+    component: api
+    environment: production
+    managed-by: platform-team
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: example-app
+      tenant: team-a
+  template:
+    metadata:
+      labels:
+        tenant: team-a
+        app: example-app
+        component: api
+        environment: production
+    spec:
+      serviceAccountName: team-a-app
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+      containers:
+      - name: app
+        image: nginx:1.25
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        env:
+        - name: ENV
+          value: "production"
+        - name: TENANT
+          value: "team-a"

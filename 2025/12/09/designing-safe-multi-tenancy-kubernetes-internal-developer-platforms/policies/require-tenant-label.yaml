@@ -1,0 +1,24 @@
+apiVersion: kyverno.io/v1
+kind: ClusterPolicy
+metadata:
+  name: require-tenant-label
+spec:
+  validationFailureAction: enforce
+  background: false
+  rules:
+  - name: check-tenant-label
+    match:
+      resources:
+        kinds:
+        - Pod
+        - Deployment
+        - StatefulSet
+        - DaemonSet
+        - Job
+        - CronJob
+    validate:
+      message: "All workloads must have a 'tenant' label matching the namespace"
+      pattern:
+        metadata:
+          labels:
+            tenant: "{{request.namespace}}"
