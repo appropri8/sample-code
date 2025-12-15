@@ -1,0 +1,19 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: rate-limit-api
+  namespace: my-app
+spec:
+  selector:
+    matchLabels:
+      app: echo-server
+  action: ALLOW
+  rules:
+  - to:
+    - operation:
+        paths: ["/api/*"]
+        methods: ["GET", "POST"]
+  # This policy applies to /api/* paths
+  # Requires a waypoint proxy for L7 processing
+  # Deploy waypoint first: istioctl x waypoint apply --namespace my-app
+

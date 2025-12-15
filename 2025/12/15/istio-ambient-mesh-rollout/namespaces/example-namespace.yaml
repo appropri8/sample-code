@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: my-app
+  labels:
+    istio.io/dataplane-mode: ambient
+    name: my-app
+

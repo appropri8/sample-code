@@ -1,0 +1,159 @@
+# Complete example: Namespace with ambient mode, workloads, and policies
+
+---
+# Namespace with ambient mode enabled
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: example-app
+  labels:
+    istio.io/dataplane-mode: ambient
+    name: example-app
+
+---
+# Frontend service account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: frontend
+  namespace: example-app
+
+---
+# Backend service account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backend
+  namespace: example-app
+
+---
+# Frontend service
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend
+  namespace: example-app
+  labels:
+    app: frontend
+spec:
+  ports:
+  - port: 8080
+    name: http
+    targetPort: 8080
+  selector:
+    app: frontend
+
+---
+# Frontend deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend
+  namespace: example-app
+  labels:
+    app: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: frontend
+  template:
+    metadata:
+      labels:
+        app: frontend
+    spec:
+      serviceAccountName: frontend
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 8080
+          name: http
+
+---
+# Backend service
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: example-app
+  labels:
+    app: backend
+spec:
+  ports:
+  - port: 8080
+    name: http
+    targetPort: 8080
+  selector:
+    app: backend
+
+---
+# Backend deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: example-app
+  labels:
+    app: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      serviceAccountName: backend
+      containers:
+      - name: echo
+        image: ealen/echo-server:latest
+        ports:
+        - containerPort: 8080
+          name: http
+        env:
+        - name: PORT
+          value: "8080"
+
+---
+# L4 Authorization Policy
+# Allows only frontend service account to reach backend
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-frontend-to-backend
+  namespace: example-app
+spec:
+  selector:
+    matchLabels:
+      app: backend
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/example-app/sa/frontend"]
+
+---
+# Note: To use L7 policies, deploy a waypoint first:
+# istioctl x waypoint apply --namespace example-app
+#
+# Then you can add L7 policies like:
+#
+# apiVersion: security.istio.io/v1beta1
+# kind: AuthorizationPolicy
+# metadata:
+#   name: rate-limit-backend
+#   namespace: example-app
+# spec:
+#   selector:
+#     matchLabels:
+#       app: backend
+#   action: ALLOW
+#   rules:
+#   - to:
+#     - operation:
+#         paths: ["/api/*"]
+#         methods: ["GET", "POST"]
+

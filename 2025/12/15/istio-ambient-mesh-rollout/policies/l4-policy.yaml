@@ -1,0 +1,18 @@
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-frontend-to-backend
+  namespace: my-app
+spec:
+  selector:
+    matchLabels:
+      app: echo-server
+  action: ALLOW
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/my-app/sa/echo-client"]
+  # This policy allows only the echo-client service account
+  # to reach the echo-server service
+  # Works with ztunnel (L4 only, no waypoint needed)
+
