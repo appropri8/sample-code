@@ -1,0 +1,17 @@
+# ReferenceGrant allows HTTPRoute in team-a namespace to reference
+# Gateway in gateway-system namespace
+apiVersion: gateway.networking.k8s.io/v1beta1
+kind: ReferenceGrant
+metadata:
+  name: allow-team-a-to-gateway
+  namespace: gateway-system
+spec:
+  from:
+  - group: gateway.networking.k8s.io
+    kind: HTTPRoute
+    namespace: team-a
+  to:
+  - group: gateway.networking.k8s.io
+    kind: Gateway
+    name: production-gateway
+

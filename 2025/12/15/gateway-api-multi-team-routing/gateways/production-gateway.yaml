@@ -1,0 +1,67 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: production-gateway
+  namespace: gateway-system
+  labels:
+    managed-by: platform-team
+    environment: production
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: https-production
+    protocol: HTTPS
+    port: 443
+    hostname: "*.prod.example.com"
+    allowedRoutes:
+      namespaces:
+        from: Selector
+        selector:
+          matchLabels:
+            gateway-access: enabled
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: wildcard-prod-cert
+        kind: Secret
+        namespace: gateway-system
+  - name: https-staging
+    protocol: HTTPS
+    port: 443
+    hostname: "*.staging.example.com"
+    allowedRoutes:
+      namespaces:
+        from: Selector
+        selector:
+          matchLabels:
+            gateway-access: enabled
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: wildcard-staging-cert
+        kind: Secret
+        namespace: gateway-system
+---
+# TLS Certificate Secret (example - use cert-manager in production)
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wildcard-prod-cert
+  namespace: gateway-system
+type: kubernetes.io/tls
+data:
+  # Base64 encoded certificate and key
+  # Replace with actual certificates
+  tls.crt: LS0tLS1CRUdJTi...
+  tls.key: LS0tLS1CRUdJTi...
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wildcard-staging-cert
+  namespace: gateway-system
+type: kubernetes.io/tls
+data:
+  tls.crt: LS0tLS1CRUdJTi...
+  tls.key: LS0tLS1CRUdJTi...
+

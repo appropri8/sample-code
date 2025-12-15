@@ -1,0 +1,105 @@
+# Complete example: Platform team setup + App team route
+# This demonstrates the full ownership pattern
+
+---
+# 1. Platform team creates GatewayClass
+apiVersion: gateway.networking.k8s.io/v1
+kind: GatewayClass
+metadata:
+  name: traefik
+  labels:
+    managed-by: platform-team
+spec:
+  controllerName: traefik.io/gateway-controller
+  description: "Traefik Gateway Controller for production traffic"
+
+---
+# 2. Platform team creates Gateway
+apiVersion: gateway.networking.k8s.io/v1
+kind: Gateway
+metadata:
+  name: production-gateway
+  namespace: gateway-system
+  labels:
+    managed-by: platform-team
+    environment: production
+spec:
+  gatewayClassName: traefik
+  listeners:
+  - name: https
+    protocol: HTTPS
+    port: 443
+    hostname: "*.prod.example.com"
+    allowedRoutes:
+      namespaces:
+        from: Selector
+        selector:
+          matchLabels:
+            gateway-access: enabled
+    tls:
+      mode: Terminate
+      certificateRefs:
+      - name: wildcard-prod-cert
+        kind: Secret
+        namespace: gateway-system
+
+---
+# 3. Platform team creates TLS certificate
+apiVersion: v1
+kind: Secret
+metadata:
+  name: wildcard-prod-cert
+  namespace: gateway-system
+type: kubernetes.io/tls
+data:
+  # In production, use cert-manager to manage this
+  tls.crt: LS0tLS1CRUdJTi...
+  tls.key: LS0tLS1CRUdJTi...
+
+---
+# 4. Platform team labels namespace to allow route attachment
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: team-a
+  labels:
+    gateway-access: enabled
+
+---
+# 5. App team creates HTTPRoute
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: user-service-route
+  namespace: team-a
+  labels:
+    managed-by: team-a
+spec:
+  parentRefs:
+  - name: production-gateway
+    namespace: gateway-system
+  hostnames:
+  - "users.prod.example.com"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: user-service
+      port: 8080
+
+---
+# 6. App team's backend service
+apiVersion: v1
+kind: Service
+metadata:
+  name: user-service
+  namespace: team-a
+spec:
+  selector:
+    app: user-service
+  ports:
+  - port: 8080
+    targetPort: 8080
+

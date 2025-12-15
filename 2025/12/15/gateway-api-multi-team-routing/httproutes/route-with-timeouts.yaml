@@ -1,0 +1,41 @@
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: api-route-with-timeouts
+  namespace: team-a
+  labels:
+    managed-by: team-a
+spec:
+  parentRefs:
+  - name: production-gateway
+    namespace: gateway-system
+  hostnames:
+  - "api.prod.example.com"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /
+    backendRefs:
+    - name: api-service
+      port: 8080
+    filters:
+    - type: RequestTimeout
+      requestTimeout: 30s
+    - type: ExtensionRef
+      extensionRef:
+        group: gateway.networking.k8s.io
+        kind: RetryPolicy
+        name: api-retry-policy
+---
+# Retry Policy (implementation-specific example)
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: api-retry-policy
+  namespace: team-a
+spec:
+  retry:
+    attempts: 3
+    initialInterval: 100ms
+

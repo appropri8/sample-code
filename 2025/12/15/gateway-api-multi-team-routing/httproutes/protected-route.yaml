@@ -1,0 +1,52 @@
+# Example showing external auth integration (Traefik-specific)
+# Note: This is implementation-specific. Other controllers may use different resources.
+
+apiVersion: gateway.networking.k8s.io/v1
+kind: HTTPRoute
+metadata:
+  name: protected-route
+  namespace: team-a
+  labels:
+    managed-by: team-a
+spec:
+  parentRefs:
+  - name: production-gateway
+    namespace: gateway-system
+  hostnames:
+  - "api.prod.example.com"
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /admin
+    filters:
+    - type: ExtensionRef
+      extensionRef:
+        group: traefik.io
+        kind: Middleware
+        name: oidc-auth
+        namespace: gateway-system
+    backendRefs:
+    - name: admin-service
+      port: 8080
+---
+# OIDC Auth Middleware (created by platform team)
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: oidc-auth
+  namespace: gateway-system
+  labels:
+    managed-by: platform-team
+spec:
+  plugin:
+    oidc:
+      issuer: "https://auth.example.com"
+      clientId: "gateway-client"
+      clientSecret: "secret-from-secret"
+      redirectUri: "https://api.prod.example.com/callback"
+      scopes:
+      - openid
+      - profile
+      - email
+
