@@ -1,0 +1,34 @@
+{
+  "name": "agent-mesh-interop-mcp-a2a",
+  "version": "1.0.0",
+  "description": "Complete executable code samples demonstrating agent mesh interoperability using MCP for tools and A2A for agent-to-agent communication",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "example:envelope": "ts-node src/examples/message-envelope-example.ts",
+    "example:gateway": "ts-node src/examples/gateway-example.ts",
+    "example:mcp": "ts-node src/examples/mcp-example.ts",
+    "example:a2a": "ts-node src/examples/a2a-example.ts",
+    "example:loop": "ts-node src/examples/loop-guard-example.ts",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "ai-agents",
+    "mcp",
+    "a2a",
+    "agent-mesh",
+    "interoperability",
+    "distributed-systems",
+    "microservices",
+    "tool-connectivity"
+  ],
+  "author": "Abdelrahman",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
+
