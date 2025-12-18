@@ -1,0 +1,37 @@
+{
+  "name": "observability-multi-agent-mesh",
+  "version": "1.0.0",
+  "description": "Complete executable code samples demonstrating observability patterns for multi-agent mesh systems: traces, budgets, and audit logs",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "example:tracing": "ts-node src/examples/tracing-example.ts",
+    "example:events": "ts-node src/examples/events-example.ts",
+    "example:budget": "ts-node src/examples/budget-example.ts",
+    "example:sanitization": "ts-node src/examples/sanitization-example.ts",
+    "example:verification": "ts-node src/examples/verification-example.ts",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "ai-agents",
+    "observability",
+    "distributed-tracing",
+    "opentelemetry",
+    "budget-management",
+    "audit-logging",
+    "multi-agent-systems"
+  ],
+  "author": "Meryem",
+  "license": "MIT",
+  "dependencies": {
+    "@opentelemetry/api": "^1.7.0",
+    "@opentelemetry/sdk-trace-base": "^1.17.0",
+    "@opentelemetry/sdk-trace-node": "^1.17.0",
+    "ajv": "^8.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
