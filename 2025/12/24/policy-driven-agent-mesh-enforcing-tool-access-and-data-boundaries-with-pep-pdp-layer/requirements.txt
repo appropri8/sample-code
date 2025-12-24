@@ -1,0 +1,10 @@
+# Core dependencies
+pytest==7.4.3
+pytest-cov==4.1.0
+
+# Optional: For production use with OPA
+# opa-client==0.1.0
+
+# Optional: For production use with Cedar
+# cedar-python==0.1.0
+
