@@ -1,0 +1,12 @@
+{"query": "What's our refund policy?", "expected_doc_id": "refund-policy", "query_type": "policy", "expected_answer_contains": ["60 days"], "should_not_contain": ["30 days"]}
+{"query": "What are the current shipping rates?", "expected_doc_id": "shipping-rates", "query_type": "product", "expected_answer_contains": ["$5.99"], "should_not_contain": ["$4.99"]}
+{"query": "How long is the return window?", "expected_doc_id": "return-policy", "query_type": "policy", "expected_answer_contains": ["21 days"], "should_not_contain": ["14 days"]}
+{"query": "What is the warranty period?", "expected_doc_id": "warranty", "query_type": "policy", "expected_answer_contains": ["2 year"], "should_not_contain": ["1 year"]}
+{"query": "What's our refund policy as of January 2026?", "expected_doc_id": "refund-policy", "query_type": "time_based", "expected_answer_contains": ["60 days"], "should_not_contain": ["30 days"]}
+{"query": "What are the latest shipping rates?", "expected_doc_id": "shipping-rates", "query_type": "time_based", "expected_answer_contains": ["$5.99"], "should_not_contain": ["$4.99"]}
+{"query": "How many products do we have?", "expected_doc_id": "product-catalog", "query_type": "product", "expected_answer_contains": ["15"], "should_not_contain": ["10"]}
+{"query": "What API endpoints are available?", "expected_doc_id": "api-documentation", "query_type": "documentation", "expected_answer_contains": ["/api/v2"], "should_not_contain": []}
+{"query": "What payment methods do you accept?", "expected_doc_id": "faq", "query_type": "general", "expected_answer_contains": ["credit cards", "PayPal"], "should_not_contain": []}
+{"query": "How do I contact support?", "expected_doc_id": "support-guide", "query_type": "general", "expected_answer_contains": ["Live Chat"], "should_not_contain": []}
+{"query": "What pricing plans are available?", "expected_doc_id": "pricing", "query_type": "product", "expected_answer_contains": ["Starter Plan"], "should_not_contain": []}
+{"query": "What are the onboarding steps?", "expected_doc_id": "onboarding", "query_type": "documentation", "expected_answer_contains": ["Step 6"], "should_not_contain": []}
