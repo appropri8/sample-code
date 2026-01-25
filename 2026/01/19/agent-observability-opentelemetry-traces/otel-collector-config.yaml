@@ -1,0 +1,40 @@
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: 0.0.0.0:4317
+      http:
+        endpoint: 0.0.0.0:4318
+
+processors:
+  batch:
+    timeout: 1s
+    send_batch_size: 1024
+  # Optional: Add resource processor to add service metadata
+  resource:
+    attributes:
+      - key: deployment.environment
+        value: "development"
+        action: upsert
+
+exporters:
+  # Console exporter for development/debugging
+  debug:
+    verbosity: detailed
+  
+  # OTLP exporter for production backends (Jaeger, Tempo, etc.)
+  otlp/production:
+    endpoint: localhost:4317  # Change to your OTLP endpoint
+    tls:
+      insecure: true  # Set to false and configure certs for production
+  
+  # File exporter for local JSON traces
+  file:
+    path: ./traces_exported/traces.json
+
+service:
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [batch, resource]
+      exporters: [debug, file]  # Add otlp/production for production use

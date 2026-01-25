@@ -1,0 +1,207 @@
+{
+  "trace_id": "bad-run-002-example",
+  "spans": [
+    {
+      "name": "agent.run",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-001",
+      "start_time": 1705670400000000,
+      "end_time": 1705670435000000,
+      "attributes": {
+        "agent.task": "Analyze code in repository",
+        "agent.task_type": "code_analysis",
+        "agent.user_id": "user-123",
+        "agent.workspace_id": "workspace-456",
+        "agent.job_id": "job-1705670400",
+        "agent.completed": false,
+        "agent.final_state": "max_iterations",
+        "agent.iterations": 10
+      }
+    },
+    {
+      "name": "llm.call",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-002",
+      "parent_span_id": "span-001",
+      "start_time": 1705670400100000,
+      "end_time": 1705670401200000,
+      "attributes": {
+        "llm.model": "gpt-4",
+        "llm.prompt_length": 150,
+        "llm.tokens_input": 75,
+        "llm.tokens_output": 75,
+        "llm.tokens_total": 150,
+        "llm.latency_ms": 110,
+        "llm.cost_estimate": 0.00675
+      }
+    },
+    {
+      "name": "decision",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-003",
+      "parent_span_id": "span-002",
+      "start_time": 1705670401250000,
+      "end_time": 1705670401300000,
+      "attributes": {
+        "decision.type": "tool_selection",
+        "decision.options_count": 1,
+        "decision.selected": "read_file",
+        "decision.reasoning": "Need to read source files"
+      }
+    },
+    {
+      "name": "tool.call",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-004",
+      "parent_span_id": "span-003",
+      "start_time": 1705670401350000,
+      "end_time": 1705670401900000,
+      "attributes": {
+        "tool.name": "read_file",
+        "tool.args_size": 25,
+        "tool.status": "success",
+        "tool.latency_ms": 55,
+        "tool.result_size": 1200
+      }
+    },
+    {
+      "name": "llm.call",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-005",
+      "parent_span_id": "span-001",
+      "start_time": 1705670402000000,
+      "end_time": 1705670403100000,
+      "attributes": {
+        "llm.model": "gpt-4",
+        "llm.prompt_length": 200,
+        "llm.tokens_input": 100,
+        "llm.tokens_output": 100,
+        "llm.tokens_total": 200,
+        "llm.latency_ms": 110,
+        "llm.cost_estimate": 0.009
+      }
+    },
+    {
+      "name": "decision",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-006",
+      "parent_span_id": "span-005",
+      "start_time": 1705670403150000,
+      "end_time": 1705670403200000,
+      "attributes": {
+        "decision.type": "tool_selection",
+        "decision.options_count": 1,
+        "decision.selected": "read_file",
+        "decision.reasoning": "Need more context"
+      }
+    },
+    {
+      "name": "tool.call",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-007",
+      "parent_span_id": "span-006",
+      "start_time": 1705670403250000,
+      "end_time": 1705670403800000,
+      "attributes": {
+        "tool.name": "read_file",
+        "tool.args_size": 25,
+        "tool.status": "success",
+        "tool.latency_ms": 55,
+        "tool.result_size": 1200
+      }
+    },
+    {
+      "name": "llm.call",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-008",
+      "parent_span_id": "span-001",
+      "start_time": 1705670404000000,
+      "end_time": 1705670405100000,
+      "attributes": {
+        "llm.model": "gpt-4",
+        "llm.prompt_length": 200,
+        "llm.tokens_input": 100,
+        "llm.tokens_output": 100,
+        "llm.tokens_total": 200,
+        "llm.latency_ms": 110,
+        "llm.cost_estimate": 0.009
+      }
+    },
+    {
+      "name": "decision",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-009",
+      "parent_span_id": "span-008",
+      "start_time": 1705670405150000,
+      "end_time": 1705670405200000,
+      "attributes": {
+        "decision.type": "tool_selection",
+        "decision.options_count": 1,
+        "decision.selected": "read_file",
+        "decision.reasoning": "Still need more files"
+      }
+    },
+    {
+      "name": "tool.call",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-010",
+      "parent_span_id": "span-009",
+      "start_time": 1705670405250000,
+      "end_time": 1705670405800000,
+      "attributes": {
+        "tool.name": "read_file",
+        "tool.args_size": 25,
+        "tool.status": "error",
+        "tool.error": "File not found: src/main.py",
+        "tool.latency_ms": 55
+      }
+    },
+    {
+      "name": "llm.call",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-011",
+      "parent_span_id": "span-001",
+      "start_time": 1705670406000000,
+      "end_time": 1705670407100000,
+      "attributes": {
+        "llm.model": "gpt-4",
+        "llm.prompt_length": 200,
+        "llm.tokens_input": 100,
+        "llm.tokens_output": 100,
+        "llm.tokens_total": 200,
+        "llm.latency_ms": 110,
+        "llm.cost_estimate": 0.009
+      }
+    },
+    {
+      "name": "tool.call",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-012",
+      "parent_span_id": "span-011",
+      "start_time": 1705670407150000,
+      "end_time": 1705670407700000,
+      "attributes": {
+        "tool.name": "read_file",
+        "tool.args_size": 25,
+        "tool.status": "error",
+        "tool.error": "Timeout after 5 seconds",
+        "tool.latency_ms": 55
+      }
+    },
+    {
+      "name": "tool.call",
+      "trace_id": "bad-run-002-example",
+      "span_id": "span-013",
+      "parent_span_id": "span-011",
+      "start_time": 1705670408000000,
+      "end_time": 1705670408550000,
+      "attributes": {
+        "tool.name": "read_file",
+        "tool.args_size": 25,
+        "tool.status": "error",
+        "tool.error": "Permission denied",
+        "tool.latency_ms": 55
+      }
+    }
+  ]
+}

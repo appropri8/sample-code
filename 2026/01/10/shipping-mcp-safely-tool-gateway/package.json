@@ -1,0 +1,42 @@
+{
+  "name": "mcp-tool-gateway",
+  "version": "1.0.0",
+  "description": "MCP Tool Gateway with AuthZ, Sandboxing, and Prompt-Injection Defense",
+  "main": "dist/gateway/server.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "ts-node src/gateway/server.ts",
+    "test": "jest",
+    "test:unit": "jest tests/unit",
+    "test:abuse": "jest tests/abuse",
+    "test:integration": "jest tests/integration"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "security",
+    "gateway",
+    "sandboxing",
+    "authorization"
+  ],
+  "author": "Yusuf Elborey",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "js-yaml": "^4.1.0",
+    "ajv": "^8.12.0",
+    "winston": "^3.11.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^20.10.0",
+    "@types/jest": "^29.5.11",
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "@types/supertest": "^2.0.16",
+    "supertest": "^6.3.3"
+  }
+}

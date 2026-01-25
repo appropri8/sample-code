@@ -1,0 +1,63 @@
+tools:
+  filesystem_read:
+    allowedRoles:
+      - developer
+      - analyst
+    constraints:
+      pathConstraints:
+        - type: allow
+          pattern: "/workspace/**"
+          basePath: "/workspace"
+      maxFileSize: 10485760  # 10MB
+      rateLimit:
+        perUser:
+          requests: 100
+          window: 60000  # 1 minute in milliseconds
+    sandbox:
+      type: container
+      networkPolicy: deny
+      timeout: 30000
+      memoryLimit: 256m
+      cpuLimit: "1.0"
+
+  filesystem_write:
+    allowedRoles:
+      - developer
+    requiresElevation: true
+    constraints:
+      pathConstraints:
+        - type: allow
+          pattern: "/workspace/**"
+          basePath: "/workspace"
+      maxFileSize: 10485760  # 10MB
+      rateLimit:
+        perUser:
+          requests: 50
+          window: 60000
+    sandbox:
+      type: container
+      networkPolicy: deny
+      timeout: 30000
+      memoryLimit: 512m
+      cpuLimit: "1.0"
+
+  git_diff:
+    allowedRoles:
+      - developer
+    constraints:
+      pathConstraints:
+        - type: allow
+          pattern: "/workspace/**"
+          basePath: "/workspace"
+      allowedCommands:
+        - git
+      rateLimit:
+        perUser:
+          requests: 100
+          window: 60000
+    sandbox:
+      type: container
+      networkPolicy: deny
+      timeout: 60000
+      memoryLimit: 512m
+      cpuLimit: "1.0"
