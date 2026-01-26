@@ -1,0 +1,40 @@
+name: Policy Check
+
+on:
+  pull_request:
+    paths:
+      - 'examples/terraform/**'
+      - 'examples/kubernetes/**'
+      - 'policies/**'
+
+jobs:
+  policy-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install conftest
+        run: |
+          wget https://github.com/open-policy-agent/conftest/releases/download/v0.45.0/conftest_0.45.0_Linux_x86_64.tar.gz
+          tar xzf conftest_0.45.0_Linux_x86_64.tar.gz
+          sudo mv conftest /usr/local/bin
+          conftest --version
+      
+      - name: Check Terraform policies
+        if: contains(github.event.pull_request.changed_files, 'terraform/') || contains(github.event.pull_request.changed_files, 'policies/terraform/')
+        working-directory: examples/terraform
+        run: |
+          terraform init
+          terraform plan -out=tfplan.binary
+          terraform show -json tfplan.binary > tfplan.json
+          conftest test tfplan.json -p ../../policies/terraform/
+      
+      - name: Check Kubernetes policies
+        if: contains(github.event.pull_request.changed_files, 'kubernetes/') || contains(github.event.pull_request.changed_files, 'policies/kubernetes/')
+        run: |
+          conftest test examples/kubernetes/*.yaml -p policies/kubernetes/
+      
+      - name: Run policy tests
+        if: contains(github.event.pull_request.changed_files, 'policies/')
+        run: |
+          conftest test --policy policies/ policies/**/*_test.rego

@@ -1,0 +1,70 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: 'Image tag to deploy'
+        required: true
+        type: string
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  verify-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+      attestations: read
+      packages: read
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3
+      
+      - name: Install jq
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y jq
+      
+      - name: Verify signature
+        run: |
+          cosign verify \
+            --certificate-identity-regexp "https://github.com/${{ github.repository }}.*" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.image_tag }}
+      
+      - name: Verify SBOM attestation
+        run: |
+          cosign verify-attestation \
+            --type spdx \
+            --certificate-identity-regexp "https://github.com/${{ github.repository }}.*" \
+            --certificate-oidc-issuer "https://token.actions.githubusercontent.com" \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.image_tag }}
+      
+      - name: Extract and verify SBOM policy
+        run: |
+          # Download SBOM attestation
+          cosign download attestation --type spdx \
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.image_tag }} > attestation.json
+          
+          # Extract SBOM from attestation
+          SBOM=$(cat attestation.json | jq -r '.payload' | base64 -d | jq -r '.predicate')
+          echo "$SBOM" > sbom.json
+          
+          # Verify SBOM policy
+          chmod +x scripts/verify-sbom-policy.sh
+          ./scripts/verify-sbom-policy.sh sbom.json
+      
+      - name: Deploy
+        run: |
+          echo "All verifications passed. Deploying ${{ inputs.image_tag }}"
+          # Your deployment logic here
+          # For example:
+          # kubectl set image deployment/myapp myapp=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.image_tag }}

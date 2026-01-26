@@ -1,0 +1,27 @@
+# Policy Exceptions Allow-List
+# 
+# All exceptions must be:
+# 1. Documented with a reason
+# 2. Reviewed and approved
+# 3. Have a migration plan (if temporary)
+
+exceptions:
+  # IAM wildcard exceptions
+  iam_wildcards:
+    - "aws_iam_role_policy.system_admin"
+      # Reason: System admin role requires broad permissions for emergency access
+      # Review: Approved by security team on 2026-01-15
+      # Migration: N/A (permanent exception)
+    
+    - "aws_iam_role_policy.legacy_app"
+      # Reason: Legacy application, migration planned Q2 2026
+      # Review: Approved by platform team on 2026-01-10
+      # Migration: Planned for Q2 2026
+  
+  # Privileged container exceptions
+  privileged_containers:
+    - namespace: "monitoring"
+      name: "node-exporter"
+      # Reason: Requires host access for system metrics collection
+      # Review: Approved by infrastructure team on 2026-01-12
+      # Migration: N/A (required for functionality)
