@@ -1,0 +1,19 @@
+{
+    "run_id": "run_xyz789",
+    "description": "Agent gets stuck in loop when docs are empty",
+    "query": "What's our refund policy?",
+    "expected_outcome": "Should refuse and say 'no docs found' instead of looping",
+    "expected_max_steps": 3,
+    "expected_tool_sequence": [
+        "search_docs",
+        "generate_answer"
+    ],
+    "expected_final_state": {
+        "answer_contains": [
+            "don't have",
+            "no documents"
+        ]
+    },
+    "incident_date": "2026-01-15",
+    "fixed_in_version": "v2.0"
+}

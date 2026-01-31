@@ -1,0 +1,40 @@
+[
+    {
+        "tool_name": "search_docs",
+        "args": {
+            "query": "What's our refund policy?"
+        },
+        "result": {
+            "docs": [
+                {
+                    "id": "doc1",
+                    "content": "Refunds are allowed within 60 days of purchase"
+                },
+                {
+                    "id": "doc2",
+                    "content": "Contact support to request a refund"
+                }
+            ],
+            "count": 2
+        }
+    },
+    {
+        "tool_name": "generate_answer",
+        "args": {
+            "query": "What's our refund policy?",
+            "docs": [
+                {
+                    "id": "doc1",
+                    "content": "Refunds are allowed within 60 days of purchase"
+                },
+                {
+                    "id": "doc2",
+                    "content": "Contact support to request a refund"
+                }
+            ]
+        },
+        "result": {
+            "answer": "Based on our policy, refunds are allowed within 60 days of purchase. Please contact support to request a refund."
+        }
+    }
+]
