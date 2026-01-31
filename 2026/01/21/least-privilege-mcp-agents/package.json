@@ -1,0 +1,41 @@
+{
+    "name": "least-privilege-mcp-agents",
+    "version": "1.0.0",
+    "description": "Security architecture for MCP agents with capability tokens and policy gates",
+    "main": "dist/index.js",
+    "scripts": {
+        "build": "tsc",
+        "example:registry": "ts-node src/1-tool-registry.ts",
+        "example:tokens": "ts-node src/2-capability-tokens.ts",
+        "example:policy": "ts-node src/3-policy-evaluator.ts",
+        "example:interceptor": "ts-node src/4-tool-interceptor.ts",
+        "example:server": "ts-node src/5-server-enforcement.ts",
+        "example:audit": "ts-node src/6-audit-logging.ts",
+        "example:integration": "ts-node src/7-integration.ts",
+        "test": "vitest run",
+        "test:unit": "vitest run tests/policy.test.ts",
+        "test:injection": "vitest run tests/injection.test.ts",
+        "test:fuzzing": "vitest run tests/fuzzing.test.ts",
+        "test:watch": "vitest"
+    },
+    "keywords": [
+        "mcp",
+        "security",
+        "least-privilege",
+        "capability-tokens",
+        "agents",
+        "llm"
+    ],
+    "author": "Ali Elborey",
+    "license": "MIT",
+    "devDependencies": {
+        "@types/jsonwebtoken": "^9.0.5",
+        "@types/node": "^20.10.0",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.3.3",
+        "vitest": "^1.1.0"
+    },
+    "dependencies": {
+        "jsonwebtoken": "^9.0.2"
+    }
+}
