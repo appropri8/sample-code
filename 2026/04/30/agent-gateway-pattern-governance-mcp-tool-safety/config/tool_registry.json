@@ -1,0 +1,113 @@
+{
+  "tools": [
+    {
+      "name": "read_order_history",
+      "description": "Read recent order history for a customer.",
+      "riskTier": "low",
+      "authScope": "orders:read",
+      "approvalRequired": false,
+      "mcpServer": "commerce",
+      "mcpTool": "orders.read_history",
+      "inputSchema": {
+        "type": "object",
+        "required": ["customerId"],
+        "additionalProperties": false,
+        "properties": {
+          "customerId": { "type": "string", "minLength": 3, "maxLength": 64 }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["customerId", "orders"],
+        "properties": {
+          "customerId": { "type": "string" },
+          "orders": { "type": "array" }
+        }
+      }
+    },
+    {
+      "name": "create_support_ticket",
+      "description": "Create a support ticket for a customer issue.",
+      "riskTier": "medium",
+      "authScope": "tickets:write",
+      "approvalRequired": false,
+      "mcpServer": "support",
+      "mcpTool": "tickets.create",
+      "inputSchema": {
+        "type": "object",
+        "required": ["customerId", "title", "summary"],
+        "additionalProperties": false,
+        "properties": {
+          "customerId": { "type": "string", "minLength": 3, "maxLength": 64 },
+          "title": { "type": "string", "minLength": 5, "maxLength": 120 },
+          "summary": { "type": "string", "minLength": 10, "maxLength": 1000 }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["ticketId", "status"],
+        "properties": {
+          "ticketId": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "refund_customer",
+      "description": "Create a customer refund for a settled order.",
+      "riskTier": "high",
+      "authScope": "payments:refund",
+      "approvalRequired": true,
+      "mcpServer": "payments",
+      "mcpTool": "payments.refund",
+      "inputSchema": {
+        "type": "object",
+        "required": ["customerId", "orderId", "amount", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "customerId": { "type": "string", "minLength": 3, "maxLength": 64 },
+          "orderId": { "type": "string", "minLength": 3, "maxLength": 64 },
+          "amount": { "type": "number", "minimum": 0.01, "maximum": 5000 },
+          "reason": { "type": "string", "minLength": 10, "maxLength": 500 }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["refundId", "status"],
+        "properties": {
+          "refundId": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      }
+    },
+    {
+      "name": "update_bank_details",
+      "description": "Update customer payout bank details.",
+      "riskTier": "high",
+      "authScope": "banking:write",
+      "approvalRequired": true,
+      "mcpServer": "banking",
+      "mcpTool": "banking.update_details",
+      "inputSchema": {
+        "type": "object",
+        "required": ["customerId", "routingNumber", "accountLast4", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "customerId": { "type": "string", "minLength": 3, "maxLength": 64 },
+          "routingNumber": { "type": "string", "minLength": 9, "maxLength": 9 },
+          "accountLast4": { "type": "string", "minLength": 4, "maxLength": 4 },
+          "reason": { "type": "string", "minLength": 10, "maxLength": 500 }
+        }
+      },
+      "outputSchema": {
+        "type": "object",
+        "required": ["changeId", "status"],
+        "properties": {
+          "changeId": { "type": "string" },
+          "status": { "type": "string" }
+        }
+      }
+    }
+  ]
+}
+

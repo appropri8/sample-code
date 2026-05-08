@@ -1,0 +1,36 @@
+{
+  "version": "2026-04-30.1",
+  "rules": [
+    {
+      "tool": "read_order_history",
+      "decision": "allow"
+    },
+    {
+      "tool": "create_support_ticket",
+      "decision": "allow",
+      "allowedRoles": ["support_agent", "support_manager"]
+    },
+    {
+      "tool": "refund_customer",
+      "decision": "allow",
+      "when": { "field": "amount", "lte": 100 }
+    },
+    {
+      "tool": "refund_customer",
+      "decision": "approval_required",
+      "when": { "field": "amount", "gt": 100 },
+      "approverRole": "finance_approver"
+    },
+    {
+      "tool": "update_bank_details",
+      "decision": "approval_required",
+      "approverRole": "finance_approver"
+    }
+  ],
+  "fallback": {
+    "low": "allow",
+    "medium": "allow",
+    "high": "approval_required"
+  }
+}
+
