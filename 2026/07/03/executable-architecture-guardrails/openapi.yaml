@@ -1,0 +1,38 @@
+openapi: 3.0.3
+info:
+  title: Payment API
+  version: 1.0.0
+
+securitySchemes:
+  bearerAuth:
+    type: http
+    scheme: bearer
+    bearerFormat: JWT
+  apiKey:
+    type: apiKey
+    in: header
+    name: X-API-Key
+
+paths:
+  /payments:
+    post:
+      summary: Create a payment
+      security:
+        - bearerAuth: []
+      responses:
+        '201':
+          description: Payment created
+        '401':
+          description: Unauthorized
+
+components:
+  schemas:
+    Payment:
+      type: object
+      properties:
+        id:
+          type: string
+        amount:
+          type: number
+        currency:
+          type: string

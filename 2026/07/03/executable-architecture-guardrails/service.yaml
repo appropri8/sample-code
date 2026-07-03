@@ -1,0 +1,14 @@
+service:
+  name: payment-api
+  owner: payments-team
+  tier: critical
+  data_classification: confidential
+  description: "Payment processing service for checkout flow"
+  repository: "https://github.com/your-org/payment-api"
+  slo_file: "slo.yaml"
+  openapi_file: "openapi.yaml"
+  dependencies:
+    - service: inventory-service
+      criticality: high
+    - service: notification-service
+      criticality: medium
