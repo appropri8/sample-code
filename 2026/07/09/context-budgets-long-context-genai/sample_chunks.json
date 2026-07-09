@@ -1,0 +1,46 @@
+[
+  {
+    "id": "pricing_policy_2026.md",
+    "tier": 2,
+    "text": "Annual plans: full refund within 30 days of purchase. After 30 days, prorated credit only.",
+    "relevance": 0.95,
+    "trust": 0.9,
+    "freshness": 0.95,
+    "user_need": 0.9,
+    "conflict_risk": 0.05,
+    "tokens": 430
+  },
+  {
+    "id": "refund_rules.md",
+    "tier": 2,
+    "text": "Refund window starts at purchase date. Proof of purchase required. Returns processed in 5 business days.",
+    "relevance": 0.9,
+    "trust": 0.85,
+    "freshness": 0.9,
+    "user_need": 0.85,
+    "conflict_risk": 0.1,
+    "tokens": 310
+  },
+  {
+    "id": "pricing_policy_2023.md",
+    "tier": 2,
+    "text": "Annual plans: 14-day refund window, no exceptions. Legacy pricing applies to grandfathered accounts.",
+    "relevance": 0.6,
+    "trust": 0.7,
+    "freshness": 0.2,
+    "user_need": 0.4,
+    "conflict_risk": 0.8,
+    "tokens": 400
+  },
+  {
+    "id": "brand_voice.md",
+    "tier": 5,
+    "text": "Use a warm, friendly tone. Prefer 'we' over 'the company'. Avoid legal jargon.",
+    "relevance": 0.25,
+    "trust": 0.8,
+    "freshness": 0.9,
+    "user_need": 0.2,
+    "conflict_risk": 0.05,
+    "tokens": 200
+  }
+]
