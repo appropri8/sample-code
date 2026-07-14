@@ -1,0 +1,62 @@
+[
+    {
+        "id": 1,
+        "query": "What is Python?",
+        "category": "programming",
+        "expected_tokens": 100
+    },
+    {
+        "id": 2,
+        "query": "How do I reset my password?",
+        "category": "support",
+        "expected_tokens": 150
+    },
+    {
+        "id": 3,
+        "query": "What are your refund terms?",
+        "category": "policy",
+        "expected_tokens": 200
+    },
+    {
+        "id": 4,
+        "query": "How much does shipping cost?",
+        "category": "sales",
+        "expected_tokens": 120
+    },
+    {
+        "id": 5,
+        "query": "Can you explain how RAG works?",
+        "category": "technical",
+        "expected_tokens": 300
+    },
+    {
+        "id": 6,
+        "query": "What is JavaScript?",
+        "category": "programming",
+        "expected_tokens": 100
+    },
+    {
+        "id": 7,
+        "query": "How do I cancel my subscription?",
+        "category": "support",
+        "expected_tokens": 150
+    },
+    {
+        "id": 8,
+        "query": "What are your privacy policies?",
+        "category": "policy",
+        "expected_tokens": 250
+    },
+    {
+        "id": 9,
+        "query": "Do you offer enterprise plans?",
+        "category": "sales",
+        "expected_tokens": 180
+    },
+    {
+        "id": 10,
+        "query": "What is prompt caching?",
+        "category": "technical",
+        "expected_tokens": 200
+    }
+]
