@@ -1,0 +1,84 @@
+{
+    "task_extractions": [
+        {
+            "text": "High priority: Fix the critical authentication bug in the login service. Users are unable to log in.",
+            "expected": {
+                "title": "Fix critical authentication bug in login service",
+                "priority": 5,
+                "category": "bug"
+            }
+        },
+        {
+            "text": "We need to implement a new dashboard feature showing user analytics and activity metrics.",
+            "expected": {
+                "title": "Implement dashboard with user analytics",
+                "priority": 3,
+                "category": "feature"
+            }
+        },
+        {
+            "text": "Low priority task: Update the API documentation to include the new endpoints we added last sprint.",
+            "expected": {
+                "title": "Update API documentation with new endpoints",
+                "priority": 2,
+                "category": "docs"
+            }
+        },
+        {
+            "text": "Refactor the database connection pooling logic to improve performance and reduce memory usage.",
+            "expected": {
+                "title": "Refactor database connection pooling",
+                "priority": 3,
+                "category": "refactor"
+            }
+        },
+        {
+            "text": "URGENT: Payment processing is failing for international transactions. This is blocking revenue.",
+            "expected": {
+                "title": "Fix payment processing for international transactions",
+                "priority": 5,
+                "category": "bug"
+            }
+        },
+        {
+            "text": "Medium priority: Add search functionality to the product catalog with filters for price and category.",
+            "expected": {
+                "title": "Add search functionality to product catalog",
+                "priority": 3,
+                "category": "feature"
+            }
+        },
+        {
+            "text": "Fix typo in footer text on the homepage. Quick fix, low priority.",
+            "expected": {
+                "title": "Fix typo in homepage footer",
+                "priority": 1,
+                "category": "bug"
+            }
+        },
+        {
+            "text": "Refactor the authentication middleware to use the new JWT library and improve security.",
+            "expected": {
+                "title": "Refactor authentication middleware with new JWT library",
+                "priority": 4,
+                "category": "refactor"
+            }
+        },
+        {
+            "text": "Create comprehensive user guide for the admin dashboard with screenshots and step-by-step instructions.",
+            "expected": {
+                "title": "Create user guide for admin dashboard",
+                "priority": 2,
+                "category": "docs"
+            }
+        },
+        {
+            "text": "Implement dark mode support across the entire application. Users have been requesting this.",
+            "expected": {
+                "title": "Implement dark mode support",
+                "priority": 3,
+                "category": "feature"
+            }
+        }
+    ]
+}
